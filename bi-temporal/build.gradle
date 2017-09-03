@@ -1,0 +1,63 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    reladomoGenTask
+}
+
+ext.reladomoVersion = '16.5.1'
+
+def defaultEncoding = 'UTF-8'
+tasks.withType(AbstractCompile) each { it.options.encoding = defaultEncoding }
+
+compileTestJava {
+    options.encoding = defaultEncoding
+}
+
+dependencies {
+    compile "com.goldmansachs.reladomo:reladomo:$reladomoVersion"
+    compile 'com.h2database:h2:1.4.192'
+    compile 'org.slf4j:slf4j-simple:1.7.21'
+    testCompile "ch.qos.logback:logback-classic:1.2.3"
+    testCompile "com.goldmansachs.reladomo:reladomo-test-util:$reladomoVersion"
+    testCompile 'junit:junit:4.12'
+}
+
+dependencies {
+    reladomoGenTask "com.goldmansachs.reladomo:reladomogen:$reladomoVersion"
+    reladomoGenTask "com.goldmansachs.reladomo:reladomo-gen-util:$reladomoVersion"
+}
+
+task genReladomo {
+    ant.taskdef(name: "genReladomo",
+            classpath: configurations.reladomoGenTask.asPath,
+            classname: "com.gs.fw.common.mithra.generator.MithraGenerator")
+    ant.genReladomo(xml: "$projectDir/src/main/resources/reladomo/ClassList.xml",
+            generateGscListMethod: "true",
+            generatedDir: "$buildDir/generated-sources/reladomo",
+            nonGeneratedDir: "$projectDir/src/main/java")
+}
+
+task genDdl {
+    ant.taskdef(name: "genDdl",
+            classpath: configurations.reladomoGenTask.asPath,
+            classname: "com.gs.fw.common.mithra.generator.dbgenerator.MithraDbDefinitionGenerator")
+    ant.genDdl(xml: "$projectDir/src/main/resources/reladomo/ClassList.xml",
+            generatedDir: "$buildDir/generated-db/sql",
+            databaseType: "postgres")
+}
+
+compileJava.dependsOn(genReladomo)
+
+sourceSets {
+    main {
+        java {
+            srcDir 'build/generated-sources/reladomo'
+        }
+    }
+}

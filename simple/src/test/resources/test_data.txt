@@ -1,0 +1,20 @@
+class sample.domain.Person
+personId, firstName, lastName, age
+0, "太郎", "田中", 24
+1, "花子",  "佐藤", 22
+2, "大輔", "鈴木", 30
+3, "夕子",  "遠藤", 25
+
+class sample.domain.Pet
+petId, name, ownerId, age, petTypeId
+0, "チビ", 1, 5, 0
+1, "ミケ", 2, 4, 1
+2, "ハム太郎", 2, 3, 2
+3, "ケロッピ", 1, 4, 3
+
+class sample.domain.PetType
+petTypeId, petType
+0, "犬"
+1, "猫"
+2, "ハムスター"
+3, "カエル"

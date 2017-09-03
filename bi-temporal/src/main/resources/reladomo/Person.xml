@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<MithraObject objectType="transactional"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="reladomoobject.xsd">
+
+    <PackageName>sample.domain</PackageName>
+    <ClassName>Person</ClassName>
+    <DefaultTable>person</DefaultTable>
+
+    <AsOfAttribute name="businessDate" fromColumnName="FROM_Z" toColumnName="THRU_Z"
+                   toIsInclusive="false"
+                   isProcessingDate="false"
+                   infinityDate="[com.gs.fw.common.mithra.util.DefaultInfinityTimestamp.getDefaultInfinity()]"
+                   futureExpiringRowsExist="true"
+    />
+
+    <AsOfAttribute name="processingDate" fromColumnName="IN_Z" toColumnName="OUT_Z"
+                   toIsInclusive="false"
+                   isProcessingDate="true"
+                   infinityDate="[com.gs.fw.common.mithra.util.DefaultInfinityTimestamp.getDefaultInfinity()]"
+                   defaultIfNotSpecified="[com.gs.fw.common.mithra.util.DefaultInfinityTimestamp.getDefaultInfinity()]"
+    />
+
+    <Attribute javaType="int" name="personId" columnName="person_id"
+               primaryKey="true" primaryKeyGeneratorStrategy="Max"/>
+
+    <Attribute javaType="String" name="firstName" columnName="first_name"
+               nullable="false" maxLength="64"/>
+
+    <Attribute javaType="String" name="lastName" columnName="last_name"
+               nullable="false" maxLength="64"/>
+
+    <Attribute javaType="int" name="age" columnName="age"
+               nullable="false"/>
+
+    <Relationship name="pets"
+                  relatedObject="Pet"
+                  cardinality="one-to-many"
+                  relatedIsDependent="true"
+                  reverseRelationshipName="owner">
+        this.personId = Pet.ownerId
+    </Relationship>
+</MithraObject>

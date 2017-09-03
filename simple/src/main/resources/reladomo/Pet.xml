@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<MithraObject objectType="transactional"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="reladomoobject.xsd">
+
+    <PackageName>sample.domain</PackageName>
+    <ClassName>Pet</ClassName>
+    <DefaultTable>pet</DefaultTable>
+
+    <Attribute javaType="int" name="petId" columnName="pet_id"
+               primaryKey="true" primaryKeyGeneratorStrategy="Max"/>
+
+    <Attribute javaType="String" name="name" columnName="name"
+               nullable="false" maxLength="64"/>
+
+    <Attribute javaType="int" name="ownerId" columnName="owner_id"
+               nullable="false"/>
+
+    <Attribute javaType="int" name="age" columnName="age"
+               nullable="false"/>
+
+    <Attribute javaType="int" name="petTypeId" columnName="pet_type_id"
+               nullable="false"/>
+
+    <Relationship name="petType"
+                  relatedObject="PetType"
+                  cardinality="many-to-one">
+        this.petTypeId = PetType.petTypeId
+    </Relationship>
+</MithraObject>
